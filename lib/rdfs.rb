@@ -8,6 +8,7 @@ require 'rdfs/version'
 module RDFS
   include RDF
 
+  autoload :Reasoner,   'rdfs/reasoner'
   autoload :Repository, 'rdfs/repository'
   autoload :Rule,       'rdfs/rule'
   autoload :Semantics,  'rdfs/semantics'
