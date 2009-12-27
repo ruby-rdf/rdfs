@@ -1,6 +1,8 @@
 module RDFS
   ##
-  # The RDFS semantics.
+  # The RDFS entailment rules.
+  #
+  # @see http://www.w3.org/TR/rdf-mt/
   module Semantics
     ##
     # RDF entailment rule `rdf1`.

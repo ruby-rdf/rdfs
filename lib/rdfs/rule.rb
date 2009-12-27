@@ -1,6 +1,6 @@
 module RDFS
   ##
-  # An RDFS rule.
+  # An RDFS entailment rule.
   class Rule
     include RDF
 
@@ -64,13 +64,13 @@ module RDFS
     end
 
     protected
-      @@antecedents = {} # :nodoc:
-      @@constraints = {} # :nodoc:
-      @@consequents = {} # :nodoc:
+      @@antecedents = {} # @private
+      @@constraints = {} # @private
+      @@consequents = {} # @private
 
       ##
       # @private
-      def self.inherited(subclass) # :nodoc:
+      def self.inherited(subclass)
         @@antecedents[subclass] = []
         @@constraints[subclass] = {}
         @@consequents[subclass] = []

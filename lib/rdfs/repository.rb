@@ -1,6 +1,6 @@
 module RDFS
   ##
-  # An RDFS repository.
+  # An RDF repository with RDFS entailment rules.
   class Repository < RDF::Repository
     include RDFS::Semantics
   end
