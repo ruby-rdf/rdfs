@@ -20,9 +20,9 @@ module RDFS
     # @yield  [rule]
     # @yieldparam [Rule]
     def initialize(options = {}, &block)
-      @antecedents = @@antecedents[self.class].concat(options[:antecedents] || [])
-      @constraints = @@constraints[self.class].merge( options[:constraints] || {})
-      @consequents = @@consequents[self.class].concat(options[:consequents] || [])
+      @antecedents = (@@antecedents[self.class] || []).concat(options[:antecedents] || [])
+      @constraints = (@@constraints[self.class] || {}).merge( options[:constraints] || {})
+      @consequents = (@@consequents[self.class] || []).concat(options[:consequents] || [])
 
       if block_given?
         case block.arity
