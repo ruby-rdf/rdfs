@@ -8,9 +8,9 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.name               = 'rdfs'
   gem.homepage           = 'http://github.com/bendiken/rdfs' # FIXME
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
-  gem.summary            = '...'
-  gem.description        = '...'
-  gem.rubyforge_project  = 'rdfs'
+  gem.summary            = 'A forward-chaining inference engine that implements the RDFS entailment rules.'
+  gem.description        = 'RDFS.rb is a forward-chaining inference engine that implements the RDFS entailment rules.'
+  gem.rubyforge_project  = 'rdfs' # TODO
 
   gem.authors            = ['Arto Bendiken']
   gem.email              = 'arto.bendiken@gmail.com'
@@ -28,6 +28,6 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.required_ruby_version      = '>= 1.8.2'
   gem.requirements               = []
   gem.add_development_dependency 'rspec', '>= 1.2.9'
-  gem.add_runtime_dependency     'rdf',   '>= 0.0.4'
+  gem.add_runtime_dependency     'rdf',   '>= 0.0.5'
   gem.post_install_message       = nil
 end
