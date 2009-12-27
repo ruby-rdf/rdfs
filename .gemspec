@@ -6,11 +6,11 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name               = 'rdfs'
-  gem.homepage           = 'http://github.com/bendiken/rdfs' # FIXME
+  gem.homepage           = 'http://rdfs.rubyforge.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A forward-chaining inference engine that implements the RDFS entailment rules.'
   gem.description        = 'RDFS.rb is a forward-chaining inference engine that implements the RDF Schema (RDFS) entailment rules.'
-  gem.rubyforge_project  = 'rdfs' # TODO
+  gem.rubyforge_project  = 'rdfs'
 
   gem.authors            = ['Arto Bendiken']
   gem.email              = 'arto.bendiken@gmail.com'
