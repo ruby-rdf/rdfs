@@ -9,7 +9,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.homepage           = 'http://github.com/bendiken/rdfs' # FIXME
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'A forward-chaining inference engine that implements the RDFS entailment rules.'
-  gem.description        = 'RDFS.rb is a forward-chaining inference engine that implements the RDFS entailment rules.'
+  gem.description        = 'RDFS.rb is a forward-chaining inference engine that implements the RDF Schema (RDFS) entailment rules.'
   gem.rubyforge_project  = 'rdfs' # TODO
 
   gem.authors            = ['Arto Bendiken']
