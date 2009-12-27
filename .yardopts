@@ -1,0 +1,8 @@
+--title "RDFS.rb"
+--output-dir doc/yard
+--markup markdown
+--readme README.md
+-
+AUTHORS
+UNLICENSE
+VERSION
