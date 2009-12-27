@@ -1,4 +1,4 @@
---title "RDFS.rb"
+--title "RDFS.rb: RDF Schema Reasoner for Ruby"
 --output-dir doc/yard
 --markup markdown
 --readme README.md
