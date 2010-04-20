@@ -47,8 +47,12 @@ module RDFS
     # @return [Array<Statement>],  :consequents ([]) or nil
     
     def match(statement1, statement2=nil, noisy = false)
-      if (ss = [statement1, statement2].compact.size) != @@antecedents.size
-        return [nil, "antecedent size (#{@@antecedents.size}) doesn't match the arguments size #{ss}"]
+      if (ss = [statement1, statement2].compact.size) != @antecedents.size
+        if noisy
+          return [nil, "antecedent size (#{@antecedents.size}) doesn't match the arguments size #{ss}"]
+        else
+          return nil
+        end
       end
 
       if @antecedents.size == 1
