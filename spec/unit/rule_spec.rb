@@ -23,7 +23,9 @@ describe ::RDFS::Rule do
     
     @rule2 = RDFS2.new
     @statement2 = Statement.new('rdf:jerk', RDFS.domain, FOAF.person)
+    @dummy_statement2 = Statement.new('rdf:jerk', RDF.type, 'schmuck')
     @matching_statements_2 = [@statement1, @statement2]
+    @dummy_statements_2 = [@statement1, @dummy_statement2]
     
     
   end
@@ -35,8 +37,14 @@ describe ::RDFS::Rule do
     
     it "with multiple antecedents" do
       @rule2[*@matching_statements_2].should.eql? [Statement.new('joe:shmoe', RDF.type, FOAF.person)]
-      
       @rule2[*(@matching_statements_2.reverse)].should.eql? [Statement.new('joe:shmoe', RDF.type, FOAF.person)]
+    end
+  end
+  
+  context "should not generate consequents from pairs of statements that don't match the antecedents" do
+    it "with multiple antecedents" do
+      @rule2[*@dummy_statements_2].should.eql? nil
+      @rule2[*(@dummy_statements_2.reverse)].should.eql? nil
     end
   end
 end

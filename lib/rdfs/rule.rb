@@ -42,94 +42,76 @@ module RDFS
     # @param  Statement statement2
     # 
     # @return [Array<Statement>],  :consequents ([]) or nil
-    def [](statement1, statement2=nil)
+    
+    def match(statement1, statement2=nil, noisy = false)
       if (ss = [statement1, statement2].compact.size) != @@antecedents.size
         return [nil, "antecedent size (#{@@antecedents.size}) doesn't match the arguments size #{ss}"]
       end
-      
-      #TODO: address constraints
-      
 
       if @antecedents.size == 1
         antecedent = @antecedents.first
         pattern, assignments, slots = antecedent.to_hash, {}, {}
       
-        #nil the placeholders
         pattern.each {|k,v| slots[k] = pattern.delete(k) if PLACEHOLDERS.include?(v) }
         
         [:subject, :object, :predicate].select {|k| pattern[k].nil?}.each {|k| 
-          #grab the metasyntactic variable
           msv = slots[k]
           assignments[msv] = statement1.send(k)
           }
-          #raise "assignments are #{assignments.inspect}"
-      
-        #match the pattern
+
         pattern = Statement.new(pattern)
         ad_hoc_repo = RDF::Repository.new.insert(statement1)
-        if ad_hoc_repo.query(pattern).empty?#pattern === statement1
-          return [nil, "pattern was #{pattern.inspect} and did not match #{statement1.inspect}"]
+        if ad_hoc_repo.query(pattern).empty?
+          if noisy
+            return [nil, "pattern was #{pattern.inspect} and did not match #{statement1.inspect}"]
+          else
+            return nil
+          end
         end
         return consequents_from(assignments)
       else
-        #TODO: need to double check that if the patterns match on two statements,
-        # the assignments for each match up
         pattern1, pattern2 = @antecedents.collect(&:to_hash)
         slots, assignments, statement1_assignments, statement2_assignments = {}, {}, {}, {}
         
-        #nil the placeholders and store them
         pattern1.each {|k,v| (slots.merge!({"#{k}_1" => pattern1.delete(k)})) if PLACEHOLDERS.include?(v) }
         pattern2.each {|k,v| (slots.merge!({"#{k}_2" => pattern2.delete(k)})) if PLACEHOLDERS.include?(v) }
-        # unless slots.values.uniq == slots.values
-        #   #TODO add constraint that those statement values will need to be the same
-        #   raise NotImplementedError
-        # end
       
-      
-      
-      
-        #match the pattern
         pattern1, pattern2 = Statement.new(pattern1), Statement.new(pattern2)
         if (pattern1 === statement1) && (pattern2 === statement2)
-          #assign slots
+
           [:subject, :object, :predicate].select {|k| pattern1.to_hash[k].nil?}.each {|k| 
-            #grab the metasyntactic variable
-            # msv = slots[k]
-            # assignments[msv] = statement1.send(k)
-            
-            
             msv = slots["#{k.to_s}_1"]
             assignments[msv] = statement1.send k
             }
             
           [:subject, :object, :predicate].select {|k| pattern2.to_hash[k].nil?}.each {|k| 
-            #grab the metasyntactic variable
             msv = slots["#{k.to_s}_2"]
             assignments[msv] = statement2.send k
             }
-          return consequents_from(assignments)
+          return consequents_from(assignments)  
         elsif (pattern1 === statement2) && (pattern2 === statement1)
-          #assign slots
-          #raise pattern1.inspect
+          
           [:subject, :object, :predicate].select {|k| pattern1.to_hash[k].nil?}.each {|k| 
-            #grab the metasyntactic variable
             msv = slots["#{k.to_s}_1"]
-            #assignments[msv] = statement2[k]
             assignments[msv] = statement2.send(k)
-            }
+          }
             
           [:subject, :object, :predicate].select {|k| pattern2.to_hash[k].nil?}.each {|k| 
-            #grab the metasyntactic variable
             msv = slots["#{k.to_s}_2"]
             assignments[msv] = statement1.send(k)
-            }
+          }
           return consequents_from(assignments)
         else
-          return false
+          if noisy
+            return [nil, "pattern was #{pattern.inspect} and did not match #{[statement1, statement2].inspect}"]
+          else
+            return nil
+          end
         end
       end
-      
     end
+    alias_method :[], :match
+    
     
     def consequents_from(assignments)
       consequent_patterns = consequents.collect(&:to_hash)
