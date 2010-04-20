@@ -60,8 +60,6 @@ module RDFS
         [:subject, :object, :predicate].select {|k| pattern[k].nil?}.each {|k| 
           #grab the metasyntactic variable
           msv = slots[k]
-          #raise assignments.inspect
-          #raise statement1.inspect
           assignments[msv] = statement1.send(k)
           }
           #raise "assignments are #{assignments.inspect}"
@@ -77,14 +75,15 @@ module RDFS
         #TODO: need to double check that if the patterns match on two statements,
         # the assignments for each match up
         pattern1, pattern2 = @antecedents.collect(&:to_hash)
-        slots = {}
-        assignments = {}
+        slots, assignments, statement1_assignments, statement2_assignments = {}, {}, {}, {}
+        
         #nil the placeholders and store them
         pattern1.each {|k,v| (slots.merge!({"#{k}_1" => pattern1.delete(k)})) if PLACEHOLDERS.include?(v) }
         pattern2.each {|k,v| (slots.merge!({"#{k}_2" => pattern2.delete(k)})) if PLACEHOLDERS.include?(v) }
-        unless slots.values.unique?
-          #TODO add constraint that those statement values will need to be the same
-        end
+        # unless slots.values.uniq == slots.values
+        #   #TODO add constraint that those statement values will need to be the same
+        #   raise NotImplementedError
+        # end
       
       
       
@@ -93,30 +92,36 @@ module RDFS
         pattern1, pattern2 = Statement.new(pattern1), Statement.new(pattern2)
         if (pattern1 === statement1) && (pattern2 === statement2)
           #assign slots
-          [:subject, :object, :predicate].select {|k| pattern1[k].nil?}.each {|k| 
+          [:subject, :object, :predicate].select {|k| pattern1.to_hash[k].nil?}.each {|k| 
             #grab the metasyntactic variable
+            # msv = slots[k]
+            # assignments[msv] = statement1.send(k)
+            
+            
             msv = slots["#{k.to_s}_1"]
-            assignments[msv] = statement1[k]
+            assignments[msv] = statement1.send k
             }
             
-          [:subject, :object, :predicate].select {|k| pattern2[k].nil?}.each {|k| 
+          [:subject, :object, :predicate].select {|k| pattern2.to_hash[k].nil?}.each {|k| 
             #grab the metasyntactic variable
             msv = slots["#{k.to_s}_2"]
-            assignments[msv] = statement2[k]
+            assignments[msv] = statement2.send k
             }
-          return consequent_from(assignments)
+          return consequents_from(assignments)
         elsif (pattern1 === statement2) && (pattern2 === statement1)
           #assign slots
-          [:subject, :object, :predicate].select {|k| pattern1[k].nil?}.each {|k| 
+          #raise pattern1.inspect
+          [:subject, :object, :predicate].select {|k| pattern1.to_hash[k].nil?}.each {|k| 
             #grab the metasyntactic variable
             msv = slots["#{k.to_s}_1"]
-            assignments[msv] = statement2[k]
+            #assignments[msv] = statement2[k]
+            assignments[msv] = statement2.send(k)
             }
             
-          [:subject, :object, :predicate].select {|k| pattern2[k].nil?}.each {|k| 
+          [:subject, :object, :predicate].select {|k| pattern2.to_hash[k].nil?}.each {|k| 
             #grab the metasyntactic variable
             msv = slots["#{k.to_s}_2"]
-            assignments[msv] = statement1[k]
+            assignments[msv] = statement1.send(k)
             }
           return consequents_from(assignments)
         else
