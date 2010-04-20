@@ -4,7 +4,7 @@ module RDFS
   class Rule
     include RDF
 
-    PLACEHOLDERS = [:aaa, :bbb, :uuu, :vvv, :xxx, :yyy]
+    PLACEHOLDERS = [:aaa, :bbb, :ccc, :ddd, :uuu, :vvv, :xxx, :yyy, :zzz]
     
     # @return [Array<Statement>]
     attr_reader :antecedents
@@ -42,21 +42,14 @@ module RDFS
     # @param  Statement statement2
     # 
     # @return [Array<Statement>],  :consequents ([]) or nil
-    def [](statement1, statement2=nil)
+    def self.[](statement1, statement2=nil)
       if [statement1, statement2].compact.size != antecedents
         return nil
       end
-      s1, p1, o1 = (statement1.subject, statement1.predicate, statement1.object rescue [nil, nil, nil])
-      s2, p2, o2 = (statement2.subject, statement2.predicate, statement2.object rescue [nil, nil, nil])
-      
-      #now try to match the statements to the antecents.  start with the first ant.
-      
+
       if antecedents.size == 1
         antecedent = antecedents.first
-        #make a hash out of the antecedent
-        pattern = antecedent.to_hash
-        assignments = {}
-        slots = {}
+        pattern, assignments, slots = antecedent.to_hash, {}, {}
       
         #nil the placeholders
         pattern.each {|k,v| slots[k] = pattern.delete(k) if PLACEHOLDERS.include?(v) }
@@ -72,12 +65,20 @@ module RDFS
         return false unless pattern === statement1
         return consequents_from(assignments)
       else
+        #TODO: need to double check that if the patterns match on two statements,
+        # the assignments for each match up
         pattern1, pattern2 = antecedents.collect(&:to_hash)
         slots = {}
         assignments = {}
         #nil the placeholders and store them
         pattern1.each {|k,v| (slots.merge! {"#{k}_1" => pattern1.delete(k)}) if PLACEHOLDERS.include?(v) }
         pattern2.each {|k,v| (slots.merge! {"#{k}_2" => pattern2.delete(k)}) if PLACEHOLDERS.include?(v) }
+        unless slots.values.unique?
+          #TODO add constraint that those statement values will need to be the same
+        end
+      
+      
+      
       
         #match the pattern
         pattern1, pattern2 = Statement.new(pattern1), Statement.new(pattern2)
@@ -116,7 +117,7 @@ module RDFS
       
     end
     
-    def consequents_from(assignments)
+    def self.consequents_from(assignments)
       consequent_patterns = consequents.collect(&:to_hash)
       output = []
       consequent_patterns.each_with_index {|c,i|
