@@ -40,6 +40,9 @@ module RDFS
     #
     # @param  Statement statement1
     # @param  Statement statement2
+    #
+    # All of the RDFS entailment rules are either pairwise or unitary on antecedents,
+    # so Rule#match takes exactly one or two statements.
     # 
     # @return [Array<Statement>],  :consequents ([]) or nil
     
@@ -118,7 +121,6 @@ module RDFS
       output = []
       consequent_patterns.each_with_index {|c,i|
         c.each {|k,v| 
-          #if the consequent value is a placeholder, replace that value with the assignment
           (c[k] = assignments[v]; output << RDF::Statement.new(c)) if PLACEHOLDERS.include?(v) }        
       }
       return output
