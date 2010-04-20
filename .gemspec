@@ -12,7 +12,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.description        = 'RDFS.rb is a forward-chaining inference engine that implements the RDF Schema (RDFS) entailment rules.'
   gem.rubyforge_project  = 'rdfs'
 
-  gem.authors            = ['Arto Bendiken']
+  gem.authors            = ['Arto Bendiken', 'Pius Uzamere']
   gem.email              = 'arto.bendiken@gmail.com'
 
   gem.platform           = Gem::Platform::RUBY
@@ -22,12 +22,12 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.default_executable = gem.executables.first
   gem.require_paths      = %w(lib)
   gem.extensions         = %w()
-  gem.test_files         = %w()
+  gem.test_files         = Dir.glob('spec/**/*.rb')
   gem.has_rdoc           = false
 
   gem.required_ruby_version      = '>= 1.8.2'
   gem.requirements               = []
   gem.add_development_dependency 'rspec', '>= 1.2.9'
-  gem.add_runtime_dependency     'rdf',   '>= 0.0.5'
+  gem.add_runtime_dependency     'rdf',   '>= 0.1.8'
   gem.post_install_message       = nil
 end
