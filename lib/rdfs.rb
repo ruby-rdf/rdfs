@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rdf'
-require 'lib/rdfs/version'
+require 'rdfs/version'
 # require 'lib/rdfs/semantics'
 # require 'lib/rdfs/rule'
 # require 'lib/rdfs/repository'
@@ -12,10 +12,10 @@ require 'lib/rdfs/version'
 module RDFS
   include RDF
 
-  autoload :Reasoner,   'lib/rdfs/reasoner'
-  autoload :Repository, 'lib/rdfs/repository'
-  autoload :Rule,       'lib/rdfs/rule'
-  autoload :Semantics,  'lib/rdfs/semantics'
+  autoload :Reasoner,   'rdfs/reasoner'
+  autoload :Repository, 'rdfs/repository'
+  autoload :Rule,       'rdfs/rule'
+  autoload :Semantics,  'rdfs/semantics'
 
   ##
   # @return [#to_s] property
